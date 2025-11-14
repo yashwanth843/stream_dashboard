@@ -3,26 +3,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { imageUrl } from '@/lib/image';
 
-type SearchProps = {
-  
-  searchParams?: Promise<{ query?: string }> | { query?: string };
-};
-
-export default async function SearchPage({ searchParams }: SearchProps) {
-  
-  const { query: rawQuery } = (await (searchParams ?? {})) as { query?: string };
-  const query = (rawQuery ?? '').trim();
-
-  if (!query) {
-    return (
-      <main className="py-8 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold">Search</h2>
-        <p className="mt-3 text-gray-600">Type something in the header search box and press Search.</p>
-      </main>
-    );
-  }
-
+export default async function SearchPage(props: any) {
   try {
+    
+    const { searchParams } = props;
+    const { query: rawQuery } = (await (searchParams ?? {})) as { query?: string };
+    const query = (rawQuery ?? '').trim();
+
+    if (!query) {
+      return (
+        <main className="py-8 max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold">Search</h2>
+          <p className="mt-3 text-gray-600">Type something in the header search box and press Search.</p>
+        </main>
+      );
+    }
+
     const data = await searchMovies(query);
     const results = data?.results ?? [];
 

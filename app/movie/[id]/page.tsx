@@ -2,11 +2,12 @@ import Image from 'next/image';
 import { fetchMovieById } from '@/lib/tmdb';
 import { imageUrl } from '@/lib/image';
 
-type ParamsMaybePromise = Promise<{ id: string }> | { id: string };
-
-export default async function MoviePage({ params }: { params: ParamsMaybePromise }) {
+export default async function MoviePage(props: any) {
   try {
+    
+    const { params } = props;
     const { id } = (await params) as { id: string };
+
     if (!id) return <div className="py-8">Missing movie id</div>;
 
     const movie = await fetchMovieById(id);
@@ -20,7 +21,13 @@ export default async function MoviePage({ params }: { params: ParamsMaybePromise
           <div className="md:w-1/3">
             {poster ? (
               <div className="rounded overflow-hidden">
-                <Image src={poster} alt={movie.title ?? 'poster'} width={420} height={630} style={{ objectFit: 'cover' }} />
+                <Image
+                  src={poster}
+                  alt={movie.title ?? 'poster'}
+                  width={420}
+                  height={630}
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
             ) : null}
           </div>
@@ -46,7 +53,9 @@ export default async function MoviePage({ params }: { params: ParamsMaybePromise
     return (
       <div className="py-8">
         <h2 className="text-red-600 font-bold">Failed to load movie details.</h2>
-        <pre className="mt-4 whitespace-pre-wrap text-sm bg-gray-100 p-3 rounded">{String(err?.message ?? err)}</pre>
+        <pre className="mt-4 whitespace-pre-wrap text-sm bg-gray-100 p-3 rounded">
+          {String(err?.message ?? err)}
+        </pre>
       </div>
     );
   }
